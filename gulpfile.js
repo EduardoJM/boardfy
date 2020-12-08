@@ -7,25 +7,55 @@ const uglify = require('gulp-uglify');
 const sass = require('gulp-sass');
 sass.compiler = require('node-sass');
 
-gulp.task('browserify', () => browserify({
-    basedir: '.',
-    debug: true,
-    entries: ['src/index.ts'],
-    cache: {},
-    packageCache: {},
-})
-    .plugin(tsify)
-    .bundle()
-    .pipe(source('boardfy.js'))
-    .pipe(gulp.dest('dist')));
+function runScripts() {
+    return browserify({
+            basedir: '.',
+            debug: true,
+            entries: ['src/index.ts'],
+            cache: {},
+            packageCache: {},
+        })
+        .plugin(tsify)
+        .bundle()
+        .pipe(source('boardfy.js'))
+        .pipe(gulp.dest('dist'));
+}
 
-gulp.task('manifest', function() {
+gulp.task('browserify', runScripts);
+
+function runManifest() {
     return gulp.src('./src/manifest.json')
         .pipe(gulp.dest('./dist'));
-});
+}
 
-gulp.task('styles', function() {
+gulp.task('manifest', runManifest);
+
+function runStyles() {
     return gulp.src('./styles/index.scss')
         .pipe(sass({ outputStyle: 'compressed' }))
         .pipe(gulp.dest('dist/styles'));
+}
+
+gulp.task('styles', runStyles);
+
+gulp.task('extension', gulp.series('browserify', 'manifest', 'styles'));
+
+gulp.task('watchScript', function() {
+    gulp.watch('./src/**/*.ts', function(){
+        return runScripts();
+    });
 });
+
+gulp.task('watchManifest', function() {
+    gulp.watch('./src/manifest.json', function(){
+        return runManifest();
+    });
+});
+
+gulp.task('watchStyles', function() {
+    gulp.watch('./styles/**/*.scss', function(){
+        return runStyles();
+    });
+});
+
+gulp.task('watch', gulp.parallel('watchScript', 'watchManifest', 'watchStyles'));

@@ -1,0 +1,17 @@
+.boardfy-canvas-board {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10000;
+
+    &.svg-board {
+        z-index: 99995;
+        pointer-events: none;
+
+        path {
+            fill: transparent;
+            stroke: red;
+            stroke-width: 1px;
+        }
+    }
+}

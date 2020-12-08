@@ -1,20 +1,38 @@
 import ToolBarItem from './ToolBarItem';
+import * as Icons from './Icons';
 
 class ToolBar {
     id: string;
 
     items: ToolBarItem[];
 
+    currentTool: number;
+
+    currentToolChanged: (toolIndex: number) => void | null;
+
     constructor() {
         const num = Math.floor(Math.random() * 1000);
-        this.id = `@boardfy-${num}`;
+        this.id = `@boardfy-toolbar-${num}`;
+        this.currentTool = -1;
+        this.currentToolChanged = null;
         this.items = [
             new ToolBarItem({
                 id: 'pen',
-                icon: 'pen',
-                text: 'Write'
+                icon: Icons.PenIcon,
+                text: 'Write',
+                onClick: () => {
+                    this.setCurrentTool(this.currentTool === 0 ? -1 : 0);
+                }
             }),
         ];
+    }
+
+    setCurrentTool(ind: number) {
+        this.currentTool = ind;
+        if (this.currentToolChanged) {
+            this.currentToolChanged(ind);
+        }
+        this.render();
     }
 
     render(): void {
@@ -25,8 +43,8 @@ class ToolBar {
             document.body.appendChild(element);
         }
         element.className = 'boardfy-toolbar';
-        const buttons = this.items.map((item) => item.render());
-        element.innerHTML = buttons.join('');
+        element.innerHTML = '';
+        this.items.forEach((item, index) => item.renderTo(element, this.currentTool === index));
     }
 }
 

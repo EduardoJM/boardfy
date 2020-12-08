@@ -10,6 +10,8 @@ class ToolBar {
 
     currentToolChanged: (toolIndex: number) => void | null;
 
+    toolClicked: (toolIndex: number) => void | null;
+
     constructor() {
         const num = Math.floor(Math.random() * 1000);
         this.id = `@boardfy-toolbar-${num}`;
@@ -22,6 +24,16 @@ class ToolBar {
                 text: 'Write',
                 onClick: () => {
                     this.setCurrentTool(this.currentTool === 0 ? -1 : 0);
+                }
+            }),
+            new ToolBarItem({
+                id: 'clear',
+                icon: Icons.ClearIcon,
+                text: 'Clear',
+                onClick: () => {
+                    if (this.toolClicked) {
+                        this.toolClicked(1);
+                    }
                 }
             }),
         ];

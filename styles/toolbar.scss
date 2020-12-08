@@ -5,7 +5,10 @@ $bg: #CCC;
     left: 5px;
     top: 5px;
 
-    display: 'inline-block';
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
     padding: 5px;
     border-radius: 5px;
 

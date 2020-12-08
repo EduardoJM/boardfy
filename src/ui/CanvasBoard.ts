@@ -105,6 +105,11 @@ class CanvasBoard {
         }
         this.context.stroke();
     }
+
+    clear() {
+        this.svg.innerHTML = '';
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
 }
 
 export default CanvasBoard;

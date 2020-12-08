@@ -21,6 +21,11 @@ t.currentToolChanged = (toolIndex: number) => {
         b.end();
     }
 };
+t.toolClicked = (toolIndex: number) => {
+    if (toolIndex === 1) {
+        b.clear();
+    }
+};
 t.render();
 
 

@@ -1,0 +1,15 @@
+{
+    "manifest_version": 2,
+    "name": "BoardFy",
+    "version": "0.1",
+    "description": "Create a board in any page in Firefox.",
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["boardfy.js"]
+      }
+    ],
+    "web_accessible_resources": [
+      "styles/index.css"
+    ]
+  }

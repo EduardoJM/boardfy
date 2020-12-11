@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/boardfy.js",
   "scripts": {
+    "build": "gulp extension",
     "watch": "gulp watch"
   },
   "keywords": [],

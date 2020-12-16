@@ -1,16 +1,7 @@
-/*
-import ToolBar from './ui/ToolBar';
-
-
-*/
 import { loadCss, loadJavaScript } from './utils/dom';
+import runtime from './utils/runtime';
 import ToolBar from './ui/ToolBar';
 import CanvasBoard from './ui/CanvasBoard';
-
-/*
-const c = new CanvasBoard();
-c.begin();
-*/
 
 const t = new ToolBar();
 const b = new CanvasBoard();
@@ -28,7 +19,4 @@ t.toolClicked = (toolIndex: number) => {
 };
 t.render();
 
-
-declare var browser: any;
-
-loadCss(browser.runtime.getURL("styles/index.css"));
+loadCss(runtime.getURL("styles/index.css"));

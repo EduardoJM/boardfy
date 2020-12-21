@@ -14,6 +14,8 @@ class CanvasBoard {
 
     currentPath: CanvasBoardPoint[];
 
+    color: string;
+
     constructor() {
         const num = Math.floor(Math.random() * 1000);
         this.id = `@boardfy-canvasboard-${num}`;
@@ -23,6 +25,7 @@ class CanvasBoard {
         this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         this.svg.classList.add('boardfy-canvas-board', 'svg-board');
         document.body.appendChild(this.svg);
+        this.color = 'black';
 
         this.mouseDown = this.mouseDown.bind(this);
         this.mouseMove = this.mouseMove.bind(this);
@@ -52,7 +55,7 @@ class CanvasBoard {
         this.context = this.canvas.getContext('2d');
         this.canvas.addEventListener('mousedown', this.mouseDown);
         
-        this.renderCanvas();
+        // this.renderCanvas();
     }
 
     end() {
@@ -68,11 +71,19 @@ class CanvasBoard {
     }
 
     mouseMove(e: MouseEvent) {
+        if (this.currentPath.length > 0) {
+            this.context.strokeStyle = this.color;
+            this.context.beginPath();
+            const l = this.currentPath.length - 1;
+            this.context.moveTo(this.currentPath[l].x, this.currentPath[l].y);
+            this.context.lineTo(e.pageX, e.pageY);
+            this.context.stroke();
+        }
         this.currentPath.push({
             x: e.pageX,
             y: e.pageY,
         });
-        this.renderCanvas();
+        //this.renderCanvas();
     }
 
     mouseUp() {
@@ -88,23 +99,27 @@ class CanvasBoard {
             }
         }).join(' ');
         path.setAttribute('d', pathStr);
+        path.setAttribute('stroke', this.color);
         this.svg.appendChild(path);
 
         this.currentPath = [];
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
+    /*
     renderCanvas() {
         if (this.currentPath.length < 2) {
             return;
         }
         this.context.beginPath();
+        this.context.strokeStyle = this.color;
         this.context.moveTo(this.currentPath[0].x, this.currentPath[0].y);
         for (let i = 1; i < this.currentPath.length; i += 1) {
             this.context.lineTo(this.currentPath[i].x, this.currentPath[i].y);
         }
         this.context.stroke();
     }
+    */
 
     clear() {
         this.svg.innerHTML = '';

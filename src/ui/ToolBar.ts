@@ -27,6 +27,16 @@ class ToolBar {
                 }
             }),
             new ToolBarItem({
+                id: 'color',
+                icon: Icons.PaletteIcon,
+                text: 'Color',
+                onClick: () => {
+                    if (this.toolClicked) {
+                        this.toolClicked(2);
+                    }
+                }
+            }),
+            new ToolBarItem({
                 id: 'clear',
                 icon: Icons.ClearIcon,
                 text: 'Clear',
@@ -35,7 +45,7 @@ class ToolBar {
                         this.toolClicked(1);
                     }
                 }
-            }),
+            })
         ];
     }
 

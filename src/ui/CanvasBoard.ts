@@ -8,11 +8,11 @@ class CanvasBoard {
 
     canvas: HTMLCanvasElement | null;
     
-    context: CanvasRenderingContext2D | null;
-
     svg: SVGElement;
 
     currentPath: CanvasBoardPoint[];
+
+    currentSvgPath: SVGElement;
 
     color: string;
 
@@ -22,9 +22,10 @@ class CanvasBoard {
         const num = Math.floor(Math.random() * 1000);
         this.id = `@boardfy-canvasboard-${num}`;
         this.canvas = null;
-        this.context = null;
         this.currentPath = [];
         this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        this.currentSvgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        this.svg.appendChild(this.currentSvgPath);
         this.svg.classList.add('boardfy-canvas-board', 'svg-board');
         document.body.appendChild(this.svg);
         this.color = '#212121';
@@ -55,42 +56,46 @@ class CanvasBoard {
         this.svg.setAttribute('height', rc.height.toString());
         this.svg.setAttributeNS('http://www.w3.org/2000/svg', 'viewBox', `0 0 ${rc.width} ${rc.height}`);
 
-        this.context = this.canvas.getContext('2d');
         this.canvas.addEventListener('mousedown', this.mouseDown);
-        
-        // this.renderCanvas();
     }
 
     end() {
         document.body.removeChild(this.canvas);
         this.canvas.removeEventListener('mousedown', this.mouseDown);
         this.canvas = null;
-        this.context = null;
+    }
+
+    private appendPoint(x: number, y: number) {
+        this.currentPath.push({ x, y });
+        if (this.currentPath.length > 0) {
+            const pathStr = this.currentPath.map((point, index) => {
+                if (index === 0) {
+                    return `M ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+                } else {
+                    return `L ${point.x.toFixed(1)} ${point.y.toFixed(1)}`;
+                }
+            }).join(' ');
+            this.currentSvgPath.setAttribute('d', pathStr);
+            this.currentSvgPath.setAttribute('stroke', this.color);
+            this.currentSvgPath.setAttribute('stroke-width', `${this.width}px`);
+        } else {
+            this.currentSvgPath.setAttribute('d', '');
+        }
     }
 
     mouseDown(e: MouseEvent) {
         this.canvas.addEventListener('mousemove', this.mouseMove);
         this.canvas.addEventListener('mouseup', this.mouseUp);
+        this.appendPoint(e.pageX, e.pageY);
     }
 
     mouseMove(e: MouseEvent) {
-        if (this.currentPath.length > 0) {
-            this.context.strokeStyle = this.color;
-            this.context.lineWidth = this.width;
-            this.context.beginPath();
-            const l = this.currentPath.length - 1;
-            this.context.moveTo(this.currentPath[l].x, this.currentPath[l].y);
-            this.context.lineTo(e.pageX, e.pageY);
-            this.context.stroke();
-        }
-        this.currentPath.push({
-            x: e.pageX,
-            y: e.pageY,
-        });
-        //this.renderCanvas();
+        this.appendPoint(e.pageX, e.pageY);
     }
 
-    mouseUp() {
+    mouseUp(e: MouseEvent) {
+        this.appendPoint(e.pageX, e.pageY);
+
         this.canvas.removeEventListener('mousemove', this.mouseMove);
         this.canvas.removeEventListener('mouseup', this.mouseUp);
 
@@ -107,28 +112,15 @@ class CanvasBoard {
         path.setAttribute('stroke-width', `${this.width}px`);
         this.svg.appendChild(path);
 
-        this.currentPath = [];
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
+        this.currentSvgPath.setAttribute('d', '');
 
-    /*
-    renderCanvas() {
-        if (this.currentPath.length < 2) {
-            return;
-        }
-        this.context.beginPath();
-        this.context.strokeStyle = this.color;
-        this.context.moveTo(this.currentPath[0].x, this.currentPath[0].y);
-        for (let i = 1; i < this.currentPath.length; i += 1) {
-            this.context.lineTo(this.currentPath[i].x, this.currentPath[i].y);
-        }
-        this.context.stroke();
+        this.currentPath = [];
     }
-    */
 
     clear() {
         this.svg.innerHTML = '';
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.currentSvgPath.setAttribute('d', '');
+        this.svg.appendChild(this.currentSvgPath);
     }
 }
 

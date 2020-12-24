@@ -16,6 +16,8 @@ class CanvasBoard {
 
     color: string;
 
+    width: number;
+
     constructor() {
         const num = Math.floor(Math.random() * 1000);
         this.id = `@boardfy-canvasboard-${num}`;
@@ -25,7 +27,8 @@ class CanvasBoard {
         this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         this.svg.classList.add('boardfy-canvas-board', 'svg-board');
         document.body.appendChild(this.svg);
-        this.color = 'black';
+        this.color = '#212121';
+        this.width = 1;
 
         this.mouseDown = this.mouseDown.bind(this);
         this.mouseMove = this.mouseMove.bind(this);
@@ -73,6 +76,7 @@ class CanvasBoard {
     mouseMove(e: MouseEvent) {
         if (this.currentPath.length > 0) {
             this.context.strokeStyle = this.color;
+            this.context.lineWidth = this.width;
             this.context.beginPath();
             const l = this.currentPath.length - 1;
             this.context.moveTo(this.currentPath[l].x, this.currentPath[l].y);
@@ -100,6 +104,7 @@ class CanvasBoard {
         }).join(' ');
         path.setAttribute('d', pathStr);
         path.setAttribute('stroke', this.color);
+        path.setAttribute('stroke-width', `${this.width}px`);
         this.svg.appendChild(path);
 
         this.currentPath = [];

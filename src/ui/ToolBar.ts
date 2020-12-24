@@ -37,6 +37,16 @@ class ToolBar {
                 }
             }),
             new ToolBarItem({
+                id: 'strokeWidth',
+                icon: Icons.LineWidthIcon,
+                text: 'Stroke Width',
+                onClick: () => {
+                    if (this.toolClicked) {
+                        this.toolClicked(3);
+                    }
+                }
+            }),
+            new ToolBarItem({
                 id: 'clear',
                 icon: Icons.ClearIcon,
                 text: 'Clear',

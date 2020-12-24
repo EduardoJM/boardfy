@@ -14,7 +14,7 @@ class ColorPalette {
         }
         this.element = el;
         this.element.style.display = 'none';
-        this.colors = ['red', 'blue', 'purple', 'green'];
+        this.colors = ['#212121', '#1b5e20', '#8e24aa', '#304ffe'];
         this.itemClick = this.itemClick.bind(this);
     }
 

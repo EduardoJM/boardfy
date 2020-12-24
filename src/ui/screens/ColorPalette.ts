@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 class ColorPalette {
     element: HTMLElement;
 
@@ -59,12 +61,12 @@ class ColorPalette {
     }
 
     start() {
-        this.element.style.display = 'block';
+        $(this.element).fadeIn();
         this.updateElementHTML();
     }
 
     end() {
-        this.element.style.display = 'none';
+        $(this.element).fadeOut();
     }
 }
 

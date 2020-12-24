@@ -15,7 +15,7 @@ function runScripts() {
             cache: {},
             packageCache: {},
         })
-        .plugin(tsify)
+        .plugin(tsify, { esModuleInterop: true })
         .bundle()
         .pipe(source('boardfy.js'))
         .pipe(gulp.dest('dist'));

@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 class StrokeWidthPalette {
     element: HTMLElement;
 
@@ -54,12 +56,12 @@ class StrokeWidthPalette {
     }
 
     start() {
-        this.element.style.display = 'block';
+        $(this.element).fadeIn();
         this.updateElementHTML();
     }
 
     end() {
-        this.element.style.display = 'none';
+        $(this.element).fadeOut();
     }
 }
 
